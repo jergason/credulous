@@ -179,8 +179,8 @@
   }
 
   /**
-   * This is terribly named. Process the array of strings into a nested
-   * array of words.
+   * This is terribly named. Process the array of strings into an
+   * array of arrays of words, with them stemmed, etc.
    */
   function processDataItems(items) {
     var processedItems = []
@@ -188,7 +188,7 @@
 
     // TODO: do stemming here
     items.forEach(function (item, i) {
-      processedItems[i] = item.split(/\s+/);
+      processedItems[i] = processString(item);
     });
   }
 
