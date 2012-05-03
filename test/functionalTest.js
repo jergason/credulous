@@ -18,6 +18,8 @@
         ;
 
       assert.equal(predictedLabel, 'high');
+      predictedLabel = credulous.classify('bad', 'low', 'adequate', 'medium');
+      assert.equal(predictedLabel, 'moderate');
     });
   });
 }());
