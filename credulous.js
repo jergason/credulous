@@ -34,36 +34,27 @@
 
     // TODO: make the data store more modular
     this.dataStore = [];
-    for (i = 0; i < this.dataLength; i++) {
-      this.dataStore[i] = {};
-    }
+    setUpDataStore(this.dataStore, this.labels, this.dataLength);
     this.instancesTrained = 0;
   }
 
-  function validateOptions(opts) {
-    if (!opts || !opts.labels) {
-      throw new Error('Constructor needs options object with "labels" and "dataLength" attributes.');
+  /**
+   * Set up structure of the datastore.
+   */
+  function setUpDataStore(dataStore, labels, dataLength) {
+    var i
+      ;
+    for (i = 0; i < dataLength; i++) {
+      dataStore[i] = {
+          words: {}
+        , labels: {}
+      };
+      labels.forEach(function (label) {
+        dataStore[i].labels[label] = 0;
+      });
     }
-    if (!opts.dataLength) {
-      opts.dataLength = 1;
-    }
-    return opts;
   }
 
-  // TODO: need a count for each word given a label, and a count for each label
-  function initializeWordInDatastore(datastore, word, labels) {
-    datastore.labels = {}
-    datastore.words = {};
-    datastore.words[word] = {};
-    labels.forEach(function (label) {
-      datastore.words[word][label] = 0;
-      datastore.labels[label] = 0;
-    });
-  }
-
-  function labelIsInPossibleLabels(label, labels) {
-    return labels.indexOf(label) !== -1;
-  }
 
   /**
    * Train the model with the given parameters.
@@ -71,7 +62,7 @@
    * The last parameter in the list is the label of the instance (ie 'spam', 'not spam', etc.
    */
   // TODO: handle laplacian correction
-  Credulous.prototype.train = function() {
+  Credulous.prototype.train = function () {
     // TODO: fix this awfulness
     var args = argsToArray(arguments)
       , length = args.length
@@ -92,7 +83,7 @@
       // have a label as well
       // for this word, when the label was this, the count was this
       elements.forEach(function (word) {
-        if (!self.dataStore[i][word]) {
+        if (!self.dataStore[i].words[word]) {
           initializeWordInDatastore(self.dataStore[i], word, self.labels);
         }
 
@@ -104,10 +95,11 @@
     this.instancesTrained++;
   };
 
-  Credulous.prototype.classify = function() {
-    var args = argsToArray(argments)
+  Credulous.prototype.classify = function () {
+    var args = argsToArray(arguments)
       , processedDataItems
       , labelScores = []
+      , self = this
       ;
 
     if (args.length != this.dataLength) {
@@ -121,11 +113,60 @@
     //     For each word in the data item:
     //       Look up the probability of a class give this word appears
     this.labels.forEach(function (label, i) {
-      labelScores[i] = getProbabilityForLabel(label, this.dataStore);
+      labelScores[i] = getProbabilityForLabel(label, self.dataStore, processedDataItems);
     });
 
     return this.labels[argMax(labelScores)];
   };
+
+  /**
+   * Render the model as JSON, so it can be written out and
+   * read back in by fromJSON.
+   * @return - JSON representing the parameters and data of the model.
+   */
+  Credulous.prototype.toJSON = function () {
+    var json = {}
+      ;
+    json.instancesTrained = this.instancesTrained;
+    json.labels = this.labels;
+    json.dataLength = this.dataLength;
+    json.trainArgumentsLength = this.trainArgumentsLength;
+    json.dataStore = this.dataStore;
+    return json;
+  }
+
+  /**
+   * Takes a JSON string and sets the properties of this
+   * model to those of the saved model.
+   */
+  Credulous.prototype.fromJSON = function (json) {
+    this.instancesTrained = json.instancesTrained;
+    this.labels = json.labels;
+    this.dataLength = json.dataLength;
+    this.trainArgumentsLength = this.trainArgumentsLength;
+    this.dataStore = json.dataStore;
+  }
+
+  function validateOptions(opts) {
+    if (!opts || !opts.labels) {
+      throw new Error('Constructor needs options object with "labels" and "dataLength" attributes.');
+    }
+    if (!opts.dataLength) {
+      opts.dataLength = 1;
+    }
+    return opts;
+  }
+
+  function initializeWordInDatastore(datastore, word, labels) {
+    datastore.words[word] = {};
+    labels.forEach(function (label) {
+      datastore.words[word][label] = 0;
+    });
+  }
+
+  function labelIsInPossibleLabels(label, labels) {
+    return labels.indexOf(label) !== -1;
+  }
 
   /**
    * Return the index of the maximum value in the array.
@@ -141,15 +182,15 @@
         maxIndex = i;
       }
     }
-    return i;
+    return maxIndex;
   }
 
-  function getProbabilityForLabel(label, dataStore) {
+  function getProbabilityForLabel(label, dataStore, processedDataItems) {
     var processedProbabilities = []
       , n
       ;
     dataStore.forEach(function (dataItem, dataItemIndex) {
-      processDataItems[dataItemIndex].forEach(function (word, j) {
+      processedDataItems[dataItemIndex].forEach(function (word, j) {
         processedProbabilities.push(getProbabilityOfWordGivenLabel(word, label, dataItem));
       });
     });
@@ -160,7 +201,7 @@
   function combineProbabilitiesIntoMAP(probabilities) {
     // calculate probability in log space to avoid underflow
     // see http://en.wikipedia.org/wiki/Bayesian_spam_filtering#Other_expression_of_the_formula_for_combining_individual_probabilities
-    n = probabilities.reduce(function (runningSum, probability) {
+    var n = probabilities.reduce(function (runningSum, probability) {
       return runningSum + (Math.log(1 - probability) - Math.log(probability))
     }, 0.0);
 
@@ -171,9 +212,17 @@
     // the probability of this word given the given class is the count of the word
     // for that class / the count of all words of the given class
     // TODO: where to do laplacian correction?
-    var count = dataStore.words[word][label]
+    var count
       , totalOfGivenClass = dataStore.labels[label]
       ;
+
+    // Handle classifying with words that we have never seen.
+    if (dataStore.words[word] === undefined) {
+      count = 0;
+    }
+    else {
+      count = dataStore.words[word][label];
+    }
 
     return count / totalOfGivenClass;
   }
@@ -190,6 +239,7 @@
     items.forEach(function (item, i) {
       processedItems[i] = processString(item);
     });
+    return processedItems;
   }
 
   /**

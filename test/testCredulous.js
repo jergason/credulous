@@ -51,7 +51,12 @@
       var credulous
         ;
       before(function () {
-        credulous = new Credulous({labels: ['spam', 'not spam'], dataLength: 1});
+        credulous = new Credulous({labels: ['spam', 'not spam'], dataLength: 2});
+        credulous.train('hurp dupr sf absdfjf asqdkj', 'qwerqwer asfdhlk', 'spam');
+      });
+
+      it('classifies new data without errors', function () {
+        credulous.classify('hurp durp durp foobar', 'a hill of beans aint a thing');
       });
 
 
