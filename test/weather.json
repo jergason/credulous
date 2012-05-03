@@ -1,0 +1,16 @@
+[
+  ["bad", "high", "none", "low", "high"],
+  ["unknown", "high", "none", "medium", "high"],
+  ["unknown", "low", "none", "medium", "moderate"],
+  ["unknown", "low", "none", "low", "high"],
+  ["unknown", "low", "none", "high", "low"],
+  ["unknown", "low", "adequate", "high", "low"],
+  ["bad", "low", "none", "low", "high"],
+  ["bad", "low", "adequate", "high", "moderate"],
+  ["good", "low", "none", "high", "low"],
+  ["good", "high", "adequate", "high", "low"],
+  ["good", "high", "none", "low", "high"],
+  ["good", "high", "none", "medium", "moderate"],
+  ["good", "high", "none", "high", "low"],
+  ["bad", "high", "none", "medium", "high"]
+]
