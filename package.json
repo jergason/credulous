@@ -1,16 +1,22 @@
 {
   "author": "Jamison Dance <jergason@gmail.com> (http://jamisondance.com)",
-  "name": "CredulousJS",
+  "name": "credulous",
   "description": "A naive bayes implementation in JavaScript.",
   "version": "0.0.1",
   "main": "credulous.js",
   "scripts": {
-    "test": "mocha test/*"
+    "test": "node_modules/.bin/mocha test/*"
   },
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "1.0.x"
+  },
   "optionalDependencies": {},
   "engines": {
     "node": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jergason/credulous.git"
   }
 }
