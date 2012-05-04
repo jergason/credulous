@@ -227,6 +227,13 @@
 
     if (count === 0) {
       count = 1;
+      //increment the count of all other labels as well
+      var incLabel;
+      for (incLabel in dataStore.words[word]) {
+        if (dataStore.words[word].hasOwnProperty(incLabel)) {
+          dataStore.words[word][incLabel]++;
+        }
+      }
     }
 
     return count / totalOfGivenClass;

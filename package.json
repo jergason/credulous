@@ -2,7 +2,7 @@
   "author": "Jamison Dance <jergason@gmail.com> (http://jamisondance.com)",
   "name": "credulous",
   "description": "A naive bayes implementation in JavaScript.",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "main": "credulous.js",
   "scripts": {
     "test": "node_modules/.bin/mocha test/*"
