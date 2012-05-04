@@ -143,7 +143,7 @@
     this.instancesTrained = json.instancesTrained;
     this.labels = json.labels;
     this.dataLength = json.dataLength;
-    this.trainArgumentsLength = this.trainArgumentsLength;
+    this.trainArgumentsLength = json.trainArgumentsLength;
     this.dataStore = json.dataStore;
   }
 

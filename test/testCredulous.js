@@ -58,8 +58,27 @@
       it('classifies new data without errors', function () {
         credulous.classify('hurp durp durp foobar', 'a hill of beans aint a thing');
       });
+    });
 
+    describe('to and from JSON', function () {
+      var credulous
+        ;
+      before(function () {
+        credulous = new Credulous({labels: ['spam', 'not spam'], dataLength: 2});
+        credulous.train('hurp dupr sf absdfjf asqdkj', 'qwerqwer asfdhlk', 'spam');
+      });
 
+      it('saves and loads to and from json correctly', function () {
+        var json = credulous.toJSON()
+          , newModel = new Credulous({labels: ['foo']})
+          ;
+        newModel.fromJSON(json);
+        assert.equal(credulous.labels, newModel.labels);
+        assert.equal(credulous.instancesTrained, newModel.instancesTrained);
+        assert.equal(credulous.dataLength, newModel.dataLength);
+        assert.equal(credulous.trainArgumentsLength, newModel.trainArgumentsLength);
+        assert.equal(credulous.dataStore, newModel.dataStore);
+      });
     });
   });
 }());
