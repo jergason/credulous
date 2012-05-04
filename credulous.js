@@ -218,10 +218,15 @@
 
     // Handle classifying with words that we have never seen.
     if (dataStore.words[word] === undefined) {
-      count = 0;
+      // Poor mans laplace correction
+      count = 1;
     }
     else {
       count = dataStore.words[word][label];
+    }
+
+    if (count === 0) {
+      count = 1;
     }
 
     return count / totalOfGivenClass;
