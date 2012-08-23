@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/jergason/credulous.png)](http://travis-ci.org/jergason/credulous)
 #credulous.js
 
 `credulous.js` is a simple implementation of a [Naive Bayes](http://en.wikipedia.org/wiki/Naive_Bayes_classifier)
