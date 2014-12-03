@@ -15,6 +15,7 @@
   "engines": {
     "node": "*"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/jergason/credulous.git"

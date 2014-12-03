@@ -40,24 +40,17 @@ You can also just download a standalone version [here](#some_link_to_standalone_
 Enough talk about usage. Get to the codes!
 
 ```javascript
-var Credulous = require('credulous')
-  , model
-  , result
-  ;
+var Credulous = require('credulous');
 
-model = new Credulous();
+var model = new Credulous();
 // .train can take a single object or an array of objects
 // The objects must be of the form { data: 'some data', class: 'a string representing the class name' }
 model.train({ data: 'Great viagra for you!', class: 'spam' });
 model.train([{ data: 'UTOSC is the best conference ever!', class: 'not spam'},
              { data: 'Some more strings that are not spam!', class: 'not spam'}]);
 
-result = model.classify('Great opportunity in Nigeria!');
+var result = model.classify('Great opportunity in Nigeria!');
 console.log('result is', result);
 // 'result is spam'
 
 ```
-
-###Advice For Better Results
-
-
