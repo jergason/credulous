@@ -1,21 +1,19 @@
 [![build status](https://secure.travis-ci.org/jergason/credulous.png)](http://travis-ci.org/jergason/credulous)
-#credulous.js
+# credulous.js
 
-`credulous.js` is a simple implementation of a [Naive Bayes](http://en.wikipedia.org/wiki/Naive_Bayes_classifier)
-classifer in JavaScript. You train it with a corpus of strings, and then classify
-new strings.
+> `credulous.js` is a simple implementation of a [Naive Bayes](http://en.wikipedia.org/wiki/Naive_Bayes_classifier) classifer in JavaScript. You train it with a corpus of strings, and then classify new strings.
 
 
-##Isn't There Already A Naive Bayes Classifier For JavaScript?
+## Isn't There Already A Naive Bayes Classifier For JavaScript?
 Yes, but then I wouldn't get to write this one myself!
 
 Also, this one implements some nice trickyness. It lets you classify on multiple
 attirbutes, does Laplace correction to better handle infrequently found words, does
 calculations in log-space to avoid underflow, and has a few other improvements.
 
-##Installation
+## Installation
 
-###node.js
+### node.js
 
 `credulous.js` is a CommonJS module, so it will work out of the box for node.js. Install
 like so:
@@ -24,7 +22,7 @@ like so:
 npm install credulous
 ```
 
-###Browser
+### Browser
 credulous.js was tested in modern browsers, and relies upon ECMAScript 5 features. That means IE 9 and
 above, Chrome, FireFox, and Safai.
 
@@ -35,7 +33,7 @@ documentation for details.
 
 You can also just download a standalone version [here](#some_link_to_standalone_version).
 
-##How To Use It
+## How To Use It
 
 Enough talk about usage. Get to the codes!
 
